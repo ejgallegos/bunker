@@ -1,0 +1,263 @@
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/usuario/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/listado">Panel Pedidos</a></li>
+    </ul>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-6">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Agregar pedido</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/pedido/guardar">
+
+
+                    <div id="wizard" class="form_wizard wizard_horizontal">
+                        <ul class="wizard_steps anchor">
+                            <li>
+                                <a href="#step-1" class="selected" isdone="1" rel="1">
+                                    <span class="step_no">1</span>
+                                    <span class="step_descr">
+                                        Paso 1<br>
+                                        <small>Seleccionar Mesa</small>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#step-2" class="disabled" isdone="0" rel="2">
+                                    <span class="step_no">2</span>
+                                    <span class="step_descr">
+                                        Paso 2<br>
+                                        <small>Seleccionar Bebidas</small>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#step-3" class="disabled" isdone="0" rel="3">
+                                    <span class="step_no">3</span>
+                                    <span class="step_descr">
+                                        Paso 3<br>
+                                        <small>Seleccionar Comida</small>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#step-4" class="disabled" isdone="0" rel="4">
+                                    <span class="step_no">4</span>
+                                    <span class="step_descr">
+                                        Paso 4<br>
+                                        <small>Finalizar Pedido</small>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+
+
+
+
+                        <div class="stepContainer">
+                            <div id="step-1" class="content" style="display: block;">
+                                <div class="col-md-6 center-margin">
+                                    <label class="">FECHA * :</label>
+                                    <div class="form-group row">
+                                        <div class="col-lg-12">
+                                            <input type="text" name="fechaHoy" id="fechaHoy" class="form-control"
+                                                required="" readonly>
+                                            <span class="fa fa-calendar-o form-control-feedback right"
+                                                aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+
+                                    <label class="">MESA * :</label>
+                                    <div class="form-group row">
+                                        <div class="col-lg-12">
+                                            <select class="form-control" name="mesa" id="mesa">
+                                                {slt_mesa}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div id="step-2" class="content" style="display: none;">
+                                <div class="col-md-12 center-margin" id="formCategorias">
+                                    <div class="form-group row">
+                                        <div class="col-lg-12">
+                                            {img_categoria}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 center-margin" id="formMarcas" style="display: none;">
+
+                                    <div class="form-group row">
+                                        <div class="col-lg-12">
+                                            <div id="muestraMarcaBebidas"></div>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="pedidoId" id="pedidoId">
+                                </div>
+
+                            </div>
+                            <div id="step-3" class="content" style="display: none;">
+                                <h2 class="StepTitle">Step 3 Content</h2>
+
+                            </div>
+
+
+                            <div id="step-4" class="content" style="display: none;">
+                                <h2 class="StepTitle">Step 4 Content</h2>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6 col-sm-6 col-xs-6" id="mostrarPedidoBebida" style="display: none;">
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center>
+                            <h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1>
+                        </center>
+                    </div>
+                    <div class="col-lg-10">
+                        <h5 id="msj_alerta_modal"></h5>
+                    </div>
+                </div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const seleccionarCategoria = (categoriaId) => {
+        const catId = parseInt(categoriaId);
+        document.getElementById("formCategorias").style.display = "none";
+        document.getElementById("formMarcas").style.display = "block";
+        const formMarcas = $.ajax({
+            url: `{url_app}/pedido/traerMarcas/${catId}`,
+            dataType: 'text',
+            async: false
+        }).responseText;
+
+        document.getElementById("muestraMarcaBebidas").innerHTML = formMarcas;
+
+    }
+
+    const cargarBebida = (arg) => {
+        const mesa = document.getElementById("mesa").value;
+        var pedido = document.getElementById("pedidoId").value;
+        const cantidadID = `cantidad${arg}`;
+        const cantidad = document.getElementById(cantidadID).value;
+        const bebidaId = parseInt(arg);
+
+        if (pedido == "" || pedido == null || pedido == 0) {
+            const cargaBebidas = $.ajax({
+                url: `{url_app}/pedido/guardar/${mesa}@${bebidaId}@${cantidad}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            let pedidoId = cargaBebidas;
+            document.getElementById("formMarcas").style.display = "none";
+            document.getElementById("formCategorias").style.display = "block";
+            document.getElementById("pedidoId").value = pedidoId;
+
+            /*CARGA TABLA DE PEDIDOS DE BEBIDAS*/
+            const tblPedidoBebida = $.ajax({
+                url: `{url_app}/pedido/mostrarPedidoBebida/${parseInt(pedidoId)}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            document.getElementById("mostrarPedidoBebida").innerHTML = tblPedidoBebida;
+            document.getElementById("mostrarPedidoBebida").style.display = "block";
+
+        } else {
+
+            const ped = parseInt(pedido);
+            const cargaNuevasBebidas = $.ajax({
+                url: `{url_app}/pedido/guardar/${mesa}@${bebidaId}@${cantidad}@${ped}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            let pedId = cargaNuevasBebidas;
+            document.getElementById("formMarcas").style.display = "none";
+            document.getElementById("formCategorias").style.display = "block";
+            document.getElementById("pedidoId").value = pedId;
+
+            /*CARGA TABLA DE PEDIDOS DE BEBIDAS*/
+            const tblPedidoBebida = $.ajax({
+                url: `{url_app}/pedido/mostrarPedidoBebida/${parseInt(pedId)}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            document.getElementById("mostrarPedidoBebida").innerHTML = tblPedidoBebida;
+            document.getElementById("mostrarPedidoBebida").style.display = "block";
+        }
+    }
+
+    const eliminaPedidoBebida = (arg) => {
+        const pedido = arg.split("@");
+        const pedidoId = pedido[0];
+        const bebidaId = pedido[1];
+
+        const eliminaPedidoBebida = $.ajax({
+            url: `{url_app}/pedido/eliminaPedidoBebida/${parseInt(pedidoId)}@${parseInt(bebidaId)}`,
+            dataType: 'text',
+            async: false
+        }).responseText;
+
+        /*CARGA TABLA DE PEDIDOS DE BEBIDAS*/
+        const tblPedidoBebida = $.ajax({
+            url: `{url_app}/pedido/mostrarPedidoBebida/${parseInt(pedidoId)}`,
+            dataType: 'text',
+            async: false
+        }).responseText;
+        document.getElementById("mostrarPedidoBebida").innerHTML = tblPedidoBebida;
+        document.getElementById("mostrarPedidoBebida").style.display = "block";
+
+        new PNotify({
+            title: 'Eliminado!',
+            text: 'Pedido de Bebida.',
+            type: 'error',
+            styling: 'bootstrap3'
+        });
+    }
+
+    const start = () => {
+        const fechaHoy = moment().format('DD/MM/YYYY');
+        document.getElementById("fechaHoy").value = fechaHoy;
+    }
+
+    window.onload = start;
+</script>

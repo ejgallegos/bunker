@@ -1,0 +1,16 @@
+<!--TBL_CATEGORIA-->
+<tr>
+    <td>{categoria-categoria_id}</td>
+    <td><img src="{url_images}categoria/{categoria-categoria_id}/{categoria-imagen}" alt="" class="img-thumbnail"
+            height="50px" width="50px">
+    </td>
+    <td>{categoria-denominacion}</td>
+    <td>
+        <center>
+            <button class="btn btn-warning btn-xs"
+                onclick="confirma_formulario(3, '{url_app}/categoria/editar/{categoria-categoria_id}');"
+                title="Editar categoria"><i class="fa fa-edit"></i></button>
+        </center>
+    </td>
+</tr>
+<!--TBL_CATEGORIA-->

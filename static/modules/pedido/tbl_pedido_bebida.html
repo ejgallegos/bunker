@@ -1,0 +1,54 @@
+<div class=" x_panel">
+    <div class="x_title">
+        <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Pedido Bebidas</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <table id="tbl_bebida" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Marca</th>
+                    <th>Denominación</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--PEDIDO_BEBIDA-->
+                <tr>
+                    <td>PEDIDO</td>
+                    <td>MARCA</td>
+                    <td>DENO</td>
+                    <td>PRECIO</td>
+                    <td>CANT</td>
+                    <td>
+                        <center>
+                            <button class="btn btn-danger btn-xs" onclick="eliminaPedidoBebida('PEDIDO@BEBIDAID')"
+                                title="Anular bebida"><i class="fa fa-trash"></i></button>
+                        </center>
+                    </td>
+                </tr>
+                <!--PEDIDO_BEBIDA-->
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $('#tbl_bebida').dataTable({
+            "aaSorting": [[0, "asc"]]
+            , "iDisplayLength": 10
+        });
+    });
+</script>
