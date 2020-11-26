@@ -110,8 +110,23 @@
 
                             </div>
                             <div id="step-3" class="content" style="display: none;">
-                                <h2 class="StepTitle">Step 3 Content</h2>
+                                <div class="col-md-12 center-margin">
 
+                                    <div class="form-group row" id="imgComidass">
+                                        <div classnoneform-group row" id="imgComidas2s">
+                                            <div class="col-lg-12">
+                                                <div>{img_comidas}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row" id="imgComidas2" style="display: none;">
+
+                                        </div>
+
+                                        <input type="hidden" name="pedidoId" id="pedidoId">
+                                    </div>
+
+                                </div>
                             </div>
 
 
@@ -133,31 +148,7 @@
 <div class="col-md-6 col-sm-6 col-xs-6" id="mostrarPedidoBebida" style="display: none;">
 </div>
 
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
-            </div>
-            <div class="modal-body">
-                <div class="col-lg-12">
-                    <div class="col-lg-2">
-                        <center>
-                            <h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1>
-                        </center>
-                    </div>
-                    <div class="col-lg-10">
-                        <h5 id="msj_alerta_modal"></h5>
-                    </div>
-                </div>
-                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
+<div class="col-md-6 col-sm-6 col-xs-6" id="mostrarPedidoComida" style="display: none;">
 </div>
 
 <script>
@@ -202,6 +193,8 @@
             document.getElementById("mostrarPedidoBebida").innerHTML = tblPedidoBebida;
             document.getElementById("mostrarPedidoBebida").style.display = "block";
 
+            notiSuccess();
+
         } else {
 
             const ped = parseInt(pedido);
@@ -223,6 +216,61 @@
             }).responseText;
             document.getElementById("mostrarPedidoBebida").innerHTML = tblPedidoBebida;
             document.getElementById("mostrarPedidoBebida").style.display = "block";
+
+            notiSuccess();
+        }
+    }
+
+    const cargarComida = (arg) => {
+        const mesa = document.getElementById("mesa").value;
+        var pedido = document.getElementById("pedidoId").value;
+        const cantcomID = `cantcom${parseInt(arg)}`;
+        const cantidad = document.getElementById(cantcomID).value;
+        const comidaId = parseInt(arg);
+
+        if (pedido == "" || pedido == null || pedido == 0) {
+            const cargaComidas = $.ajax({
+                url: `{url_app}/pedido/guardarComida/${mesa}@${comidaId}@${cantidad}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            let pedidoId = cargaComidas;
+            document.getElementById("pedidoId").value = pedidoId;
+
+            /*CARGA TABLA DE PEDIDOS DE COMIDAS*/
+            const tblPedidoBebida = $.ajax({
+                url: `{url_app}/pedido/mostrarPedidoComida/${parseInt(pedidoId)}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            document.getElementById("mostrarPedidoComida").innerHTML = tblPedidoBebida;
+            document.getElementById("mostrarPedidoComida").style.display = "block";
+
+            document.getElementById(cantcomID).value = "";
+            notiSuccess();
+
+        } else {
+
+            const ped = parseInt(pedido);
+            const cargaNuevasComidas = $.ajax({
+                url: `{url_app}/pedido/guardarComida/${mesa}@${comidaId}@${cantidad}@${ped}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            let pedId = cargaNuevasComidas;
+            document.getElementById("pedidoId").value = pedId;
+
+            /*CARGA TABLA DE PEDIDOS DE COMIDAS*/
+            const tblPedidoBebida = $.ajax({
+                url: `{url_app}/pedido/mostrarPedidoComida/${parseInt(pedId)}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            document.getElementById("mostrarPedidoComida").innerHTML = tblPedidoBebida;
+            document.getElementById("mostrarPedidoComida").style.display = "block";
+
+            document.getElementById(cantcomID).value = "";
+            notiSuccess();
         }
     }
 
@@ -246,9 +294,44 @@
         document.getElementById("mostrarPedidoBebida").innerHTML = tblPedidoBebida;
         document.getElementById("mostrarPedidoBebida").style.display = "block";
 
+        notiEliminar();
+    }
+
+    const eliminaPedidoComida = (arg) => {
+        const pedido = arg.split("@");
+        const pedidoId = pedido[0];
+        const comidaId = pedido[1];
+
+        const eliminaPedidoBebida = $.ajax({
+            url: `{url_app}/pedido/eliminaPedidoComida/${parseInt(pedidoId)}@${parseInt(comidaId)}`,
+            dataType: 'text',
+            async: false
+        }).responseText;
+
+        /*CARGA TABLA DE PEDIDOS DE COMIDAS*/
+        const tblPedidoComida = $.ajax({
+            url: `{url_app}/pedido/mostrarPedidoComida/${parseInt(pedidoId)}`,
+            dataType: 'text',
+            async: false
+        }).responseText;
+        document.getElementById("mostrarPedidoComida").innerHTML = tblPedidoComida;
+        document.getElementById("mostrarPedidoComida").style.display = "block";
+
+        notiEliminar();
+    }
+    const notiSuccess = () => {
         new PNotify({
-            title: 'Eliminado!',
-            text: 'Pedido de Bebida.',
+            title: 'Excelente!',
+            text: 'Pedido Registrado.',
+            type: 'success',
+            styling: 'bootstrap3'
+        });
+    }
+
+    const notiEliminar = () => {
+        new PNotify({
+            title: 'Aviso!',
+            text: 'Pedido Eliminado.',
             type: 'error',
             styling: 'bootstrap3'
         });

@@ -69,8 +69,7 @@ function SmartWizard(target, options) {
 
 		$($this.buttons.next).click(function () {
 			$this.goForward();
-			document.getElementById("mostrarPedidoBebida").style.display =
-				"none";
+			//document.getElementById("mostrarPedidoBebida").style.display = "none";
 			return false;
 		});
 		$($this.buttons.previous).click(function () {

@@ -4,7 +4,9 @@ require_once "modules/pedido/view.php";
 require_once "modules/mesa/model.php";
 require_once "modules/bebida/model.php";
 require_once "modules/marca/model.php";
+require_once "modules/comida/model.php";
 require_once "modules/bebidapedido/model.php";
+require_once "modules/comidapedido/model.php";
 
 
 class PedidoController {
@@ -42,7 +44,15 @@ class PedidoController {
 			unset($valor->archivo_collection);
 		}
 
-		$this->view->agregar($mesa_collection, $categoria_collection);
+		$comida_collection = Collector()->get('Comida');
+
+		foreach ($comida_collection as $clave => $valor) {
+			if ($valor->habilitado == 1 && $valor->eliminado == 0) {
+				$comidas[] = $valor;
+			}
+		}
+
+		$this->view->agregar($mesa_collection, $categoria_collection, $comidas);
 	}
 
 	function traerMarcas($arg) {
@@ -53,8 +63,9 @@ class PedidoController {
 		$bebidas_collection = CollectorCondition()->get('Bebida', $where, 4, $from, $select);
 		$this->view->traerMarcas($bebidas_collection);
 	}
-
+	
 	function guardar($arg) {
+		//GUARDA EL PEDIDO DE BEBIDA
 		SessionHandler()->check_session();
 		date_default_timezone_set('America/Argentina/La_Rioja');
 		$ids = explode('@', $arg);
@@ -88,13 +99,57 @@ class PedidoController {
 
 	}
 
+	function guardarComida($arg) {
+		//GUARDA EL PEDIDO DE COMIDA
+		SessionHandler()->check_session();
+		date_default_timezone_set('America/Argentina/La_Rioja');
+		$ids = explode('@', $arg);
+		$mesa = $ids[0];
+		$comida = $ids[1];
+		$cantidad = $ids[2];
+		$pedidoId = $ids[3];
+		
+		if ($pedidoId != null || $pedidoId != 0 || $pedidoId != "") {
+			$bp = new ComidaPedido();
+			$bp->pedido = $pedidoId;
+			$bp->comida = $comida;
+			$bp->cantidad = $cantidad;
+			$bp->save();
+			print($pedidoId);exit;
+		}
+
+		$this->model->fecha = date('Y-m-d');		
+		$this->model->mesa = $mesa;		
+		$this->model->estado = 1;		
+        $this->model->save();
+		
+		$pedido_id = $this->model->pedido_id;
+		
+		$bp = new ComidaPedido();
+		$bp->pedido = $pedido_id;
+		$bp->comida = $comida;
+		$bp->cantidad = $cantidad;
+		$bp->save();
+		print($pedido_id);exit;
+
+	}
+
 	function mostrarPedidoBebida($arg){
 		SessionHandler()->check_session();
-		$select = "bp.pedido PEDIDO, m.denominacion MARCA, b.bebida_id BEBIDAID, b.denominacion DENO, b.valor PRECIO, bp.cantidad CANT";
+		$select = "bp.pedido PEDIDO, m.denominacion MARCA, bp.bebida BEBIDAID, b.denominacion DENO, b.valor PRECIO, bp.cantidad CANT";
 		$from = "bebidapedido bp, bebida b, marca m";
 		$where = "bp.bebida = b.bebida_id AND b.marca = m.marca_id AND bp.pedido = {$arg}";
 		$bebidas_collection = CollectorCondition()->get('BebidaPedido', $where, 4, $from, $select);
 		$this->view->mostrarPedidoBebida($bebidas_collection);
+	} 
+	
+	function mostrarPedidoComida($arg){
+		SessionHandler()->check_session();
+		$select = "cp.pedido PEDIDO, cp.comida COMIDAID, c.denominacion DENO, c.valor PRECIO, cp.cantidad CANT";
+		$from = "comida c, comidapedido cp";
+		$where = "c.comida_id = cp.comida AND cp.pedido = {$arg}";
+		$comidas_collection = CollectorCondition()->get('ComidaPedido', $where, 4, $from, $select);
+		$this->view->mostrarPedidoComida($comidas_collection);
 	} 
 
 	function eliminaPedidoBebida($arg){
@@ -111,6 +166,22 @@ class PedidoController {
 		$bp->bebidapedido_id = $bpid;
 		$bp->get();
 		$bp->delete();
+	}
+	
+	function eliminaPedidoComida($arg){
+		SessionHandler()->check_session();
+		$ids = explode('@', $arg);
+		$pedidoId = $ids[0];
+		$comidaId = $ids[1];
+		$select = "comidapedido_id ID";
+		$from = "comidapedido";
+		$where = "pedido = {$pedidoId} AND comida = {$comidaId}";
+		$comidaPedidoId = CollectorCondition()->get('ComidaPedido', $where, 4, $from, $select);
+		$cpid = $comidaPedidoId[0]["ID"];
+		$cp = new ComidaPedido();
+		$cp->comidapedido_id = $cpid;
+		$cp->get();
+		$cp->delete();
 	}
 
 

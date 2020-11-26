@@ -20,7 +20,8 @@
         </div>
         <div class="x_content">
             <div class=" form">
-                <form class="form" id="formulario_guardar" method="post" action="{url_app}/comida/guardar">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/comida/guardar"
+                    enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Denominación</label>
                         <input type="text" class="form-control" id="denominacion" name="denominacion" required>
@@ -32,6 +33,10 @@
                     <div class="form-group">
                         <label>Precio</label>
                         <input type="number" class="form-control" id="valor" name="valor" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Imágen</label>
+                        <input name="archivo" id="archivo" type="file" required>
                     </div>
 
                     <div class="col-lg-12" style="margin-top: 2%;" align="right">
@@ -58,6 +63,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Imágen</th>
                         <th>Denominación</th>
                         <th>Precio</th>
                         <th></th>
@@ -67,6 +73,8 @@
                     <!--TBL_COMIDA-->
                     <tr>
                         <td>{comida-comida_id}</td>
+                        <td><img src="{url_images}comida/{comida-comida_id}/{comida-imagen}" alt=""
+                                class="img-thumbnail" width="100px" height="80px"></td>
                         <td>{comida-denominacion}</td>
                         <td>{comida-valor}</td>
                         <td>

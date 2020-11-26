@@ -8,6 +8,7 @@ class Comida extends StandardObject {
 		$this->denominacion = '';
 		$this->descripcion = '';
 		$this->valor = 0.00;
+		$this->imagen = '';
 		$this->habilitado = 1;
 		$this->eliminado = 0;
 	}
