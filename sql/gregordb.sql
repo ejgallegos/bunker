@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-11-2020 a las 10:55:52
+-- Tiempo de generación: 26-11-2020 a las 10:55:39
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.4.11
 
@@ -40,10 +40,38 @@ CREATE TABLE `archivo` (
 --
 
 INSERT INTO `archivo` (`archivo_id`, `denominacion`, `url`, `fecha_carga`, `formato`) VALUES
-(1, 'lata pepsi', '5202011201065249139', '2020-11-20', 'jpeg'),
-(2, 'COMIDAS', '620201120836675292', '2020-11-20', 'jpeg'),
-(3, 'COMIDAS', '7202011202047440718', '2020-11-20', 'jpeg'),
-(4, 'COCA COLA 1/2 LITRO', '8202011201328187648', '2020-11-20', 'jpeg');
+(2, 'Schweppes', '220201121294809760', '2020-11-21', 'png'),
+(3, 'fanta', '320201121986836892', '2020-11-21', 'jpeg'),
+(4, 'sprite', '42020112179225516', '2020-11-21', 'png'),
+(5, 'coca-cola', '120201121953974780', '2020-11-21', 'png'),
+(7, 'cervesas', '220201121328277250', '2020-11-21', 'png'),
+(8, 'agua', '320201121818087275', '2020-11-21', 'png'),
+(9, 'tragos', '4202011211424201692', '2020-11-21', 'png'),
+(10, 'cafe', '5202011211757480625', '2020-11-21', 'png'),
+(12, 'gaseosas', '620201121588898477', '2020-11-21', 'png');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `archivocategoria`
+--
+
+CREATE TABLE `archivocategoria` (
+  `archivocategoria_id` int(11) NOT NULL,
+  `compuesto` int(11) NOT NULL,
+  `compositor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `archivocategoria`
+--
+
+INSERT INTO `archivocategoria` (`archivocategoria_id`, `compuesto`, `compositor`) VALUES
+(1, 3, 8),
+(2, 4, 9),
+(3, 5, 10),
+(4, 2, 7),
+(6, 6, 12);
 
 -- --------------------------------------------------------
 
@@ -62,10 +90,10 @@ CREATE TABLE `archivomarca` (
 --
 
 INSERT INTO `archivomarca` (`archivomarca_id`, `compuesto`, `compositor`) VALUES
-(1, 5, 1),
-(2, 6, 2),
-(3, 7, 3),
-(4, 8, 4);
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4),
+(6, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -75,8 +103,9 @@ INSERT INTO `archivomarca` (`archivomarca_id`, `compuesto`, `compositor`) VALUES
 
 CREATE TABLE `bebida` (
   `bebida_id` int(11) NOT NULL,
+  `categoria` int(11) NOT NULL,
+  `marca` int(11) NOT NULL,
   `denominacion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `imagen` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
   `valor` decimal(6,2) DEFAULT NULL,
   `stock` int(11) NOT NULL,
   `habilitado` tinyint(4) DEFAULT '1',
@@ -89,9 +118,11 @@ CREATE TABLE `bebida` (
 -- Volcado de datos para la tabla `bebida`
 --
 
-INSERT INTO `bebida` (`bebida_id`, `denominacion`, `imagen`, `valor`, `stock`, `habilitado`, `eliminado`, `create`, `update`) VALUES
-(1, 'COCA COLA 1/2 LITRO', '', '150.00', 55, 1, 0, '2020-11-17 21:12:02', '2020-11-17 21:12:02'),
-(2, 'LATA PEPSI', '', '50.00', 0, 1, 0, '2020-11-17 21:51:45', '2020-11-17 21:51:45');
+INSERT INTO `bebida` (`bebida_id`, `categoria`, `marca`, `denominacion`, `valor`, `stock`, `habilitado`, `eliminado`, `create`, `update`) VALUES
+(3, 6, 3, '1 1/2 LITRO Y MEDIO', '150.00', 50, 1, 0, '2020-11-21 02:46:08', '2020-11-21 02:46:08'),
+(4, 6, 2, '1 1/2 LITRO Y MEDIO', '75.00', 20, 1, 0, '2020-11-21 03:18:34', '2020-11-21 03:18:34'),
+(5, 6, 1, '1/2 MEDIO LITRO', '75.00', 70, 1, 0, '2020-11-22 22:13:02', '2020-11-22 22:13:02'),
+(6, 2, 2, '1 LITRO', '130.00', 50, 1, 0, '2020-11-23 15:28:09', '2020-11-23 15:28:09');
 
 -- --------------------------------------------------------
 
@@ -100,10 +131,57 @@ INSERT INTO `bebida` (`bebida_id`, `denominacion`, `imagen`, `valor`, `stock`, `
 --
 
 CREATE TABLE `bebidapedido` (
-  `bebidamesa_id` int(11) NOT NULL,
-  `compuesto` int(11) DEFAULT NULL,
-  `compositor` int(11) DEFAULT NULL
+  `bebidapedido_id` int(11) NOT NULL,
+  `pedido` int(11) DEFAULT NULL,
+  `bebida` int(11) DEFAULT NULL,
+  `cantidad` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `bebidapedido`
+--
+
+INSERT INTO `bebidapedido` (`bebidapedido_id`, `pedido`, `bebida`, `cantidad`) VALUES
+(230, 155, 5, 1),
+(232, 157, 6, 1),
+(233, 157, 5, 1),
+(234, 158, 6, 1),
+(235, 158, 3, 2),
+(236, 159, 4, 1),
+(237, 160, 5, 1),
+(238, 160, 6, 1),
+(239, 161, 3, 1),
+(240, 161, 5, 1),
+(241, 162, 6, 1),
+(242, 163, 6, 1),
+(243, 163, 6, 1),
+(244, 164, 3, 1),
+(245, 165, 3, 1),
+(247, 165, 4, 1),
+(248, 166, 6, 1),
+(250, 167, 6, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `categoria`
+--
+
+CREATE TABLE `categoria` (
+  `categoria_id` int(11) NOT NULL,
+  `denominacion` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`categoria_id`, `denominacion`) VALUES
+(2, 'CERVEZAS'),
+(3, 'AGUA'),
+(4, 'TRAGOS'),
+(5, 'CAFE'),
+(6, 'GASEOSAS');
 
 -- --------------------------------------------------------
 
@@ -134,6 +212,7 @@ CREATE TABLE `comida` (
   `denominacion` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `descripcion` text COLLATE utf8_spanish_ci NOT NULL,
   `valor` decimal(6,2) DEFAULT NULL,
+  `imagen` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
   `habilitado` tinyint(4) DEFAULT '1',
   `eliminado` tinyint(4) DEFAULT '0',
   `create` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -144,8 +223,9 @@ CREATE TABLE `comida` (
 -- Volcado de datos para la tabla `comida`
 --
 
-INSERT INTO `comida` (`comida_id`, `denominacion`, `descripcion`, `valor`, `habilitado`, `eliminado`, `create`, `update`) VALUES
-(1, 'TOSTADOS', 'DESCRIPCION', '250.00', 1, 0, '2020-11-17 21:48:30', '2020-11-17 21:48:30');
+INSERT INTO `comida` (`comida_id`, `denominacion`, `descripcion`, `valor`, `imagen`, `habilitado`, `eliminado`, `create`, `update`) VALUES
+(4, 'TOSTADOS', 'DOBLE MIGA', '125.00', '4202011251420495005.png', 1, 0, '2020-11-25 13:54:57', '2020-11-25 13:54:57'),
+(5, 'MEDIALUNA', '', '25.00', '5202011251864527608.png', 1, 0, '2020-11-25 13:59:59', '2020-11-25 13:59:59');
 
 -- --------------------------------------------------------
 
@@ -155,9 +235,48 @@ INSERT INTO `comida` (`comida_id`, `denominacion`, `descripcion`, `valor`, `habi
 
 CREATE TABLE `comidapedido` (
   `comidapedido_id` int(11) NOT NULL,
-  `compuesto` int(11) DEFAULT NULL,
-  `compositor` int(11) DEFAULT NULL
+  `pedido` int(11) DEFAULT NULL,
+  `comida` int(11) DEFAULT NULL,
+  `cantidad` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `comidapedido`
+--
+
+INSERT INTO `comidapedido` (`comidapedido_id`, `pedido`, `comida`, `cantidad`) VALUES
+(26, 155, 4, 0),
+(27, 155, 5, 0),
+(36, 157, 5, 1),
+(37, 157, 4, 0),
+(38, 158, 5, 1),
+(39, 158, 5, 2),
+(40, 158, 5, 0),
+(41, 159, 5, 3),
+(42, 159, 4, 1),
+(43, 159, 4, 0),
+(44, 159, 5, 0),
+(45, 160, 4, 1),
+(46, 160, 5, 3),
+(48, 161, 5, 1),
+(49, 161, 5, 0),
+(50, 161, 4, 0),
+(51, 162, 5, 3),
+(52, 162, 4, 1),
+(53, 162, 4, 5),
+(54, 162, 5, 3),
+(55, 163, 5, 3),
+(56, 163, 4, 1),
+(57, 163, 5, 4),
+(58, 164, 5, 3),
+(59, 164, 5, 1),
+(60, 165, 5, 3),
+(63, 165, 4, 1),
+(64, 166, 4, 1),
+(65, 166, 5, 1),
+(66, 167, 4, 2),
+(67, 167, 4, 1),
+(68, 167, 5, 2);
 
 -- --------------------------------------------------------
 
@@ -304,14 +423,10 @@ CREATE TABLE `marca` (
 --
 
 INSERT INTO `marca` (`marca_id`, `denominacion`) VALUES
-(1, 'COCA COLA 1/2 LITRO'),
-(2, 'COMIDAS'),
-(3, 'COMIDAS'),
-(4, 'DOS'),
-(5, 'LATA PEPSI'),
-(6, 'COMIDAS'),
-(7, 'COMIDAS'),
-(8, 'COCA COLA 1/2 LITRO');
+(1, 'COCA-COLA'),
+(2, 'SCHWEPPES'),
+(3, 'FANTA'),
+(4, 'SPRITE');
 
 -- --------------------------------------------------------
 
@@ -357,20 +472,37 @@ INSERT INTO `mesa` (`mesa_id`, `denominacion`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pedidio`
+-- Estructura de tabla para la tabla `pedido`
 --
 
-CREATE TABLE `pedidio` (
+CREATE TABLE `pedido` (
   `pedido_id` int(11) NOT NULL,
-  `fecha` datetime DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
   `mesa` int(11) DEFAULT NULL,
-  `comida_subtotal` decimal(6,2) DEFAULT NULL,
-  `bebida_subtotal` decimal(6,2) DEFAULT NULL,
   `estado` tinyint(4) DEFAULT '1',
-  `pedidio_total` decimal(6,2) DEFAULT NULL,
   `create` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `update` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`pedido_id`, `fecha`, `mesa`, `estado`, `create`, `update`) VALUES
+(154, '2020-11-25', 1, 1, '2020-11-25 23:02:29', '2020-11-25 23:02:29'),
+(155, '2020-11-25', 1, 1, '2020-11-25 23:24:53', '2020-11-25 23:24:53'),
+(156, '2020-11-25', 1, 1, '2020-11-25 23:33:36', '2020-11-25 23:33:36'),
+(157, '2020-11-25', 1, 1, '2020-11-25 23:34:48', '2020-11-25 23:34:48'),
+(158, '2020-11-25', 1, 1, '2020-11-26 00:11:04', '2020-11-26 00:11:04'),
+(159, '2020-11-25', 1, 1, '2020-11-26 00:13:08', '2020-11-26 00:13:08'),
+(160, '2020-11-25', 1, 1, '2020-11-26 01:11:01', '2020-11-26 01:11:01'),
+(161, '2020-11-25', 1, 1, '2020-11-26 01:14:25', '2020-11-26 01:14:25'),
+(162, '2020-11-25', 1, 1, '2020-11-26 01:20:57', '2020-11-26 01:20:57'),
+(163, '2020-11-25', 1, 1, '2020-11-26 01:26:34', '2020-11-26 01:26:34'),
+(164, '2020-11-25', 1, 1, '2020-11-26 01:27:28', '2020-11-26 01:27:28'),
+(165, '2020-11-25', 1, 1, '2020-11-26 01:28:56', '2020-11-26 01:28:56'),
+(166, '2020-11-25', 1, 1, '2020-11-26 01:34:53', '2020-11-26 01:34:53'),
+(167, '2020-11-25', 1, 1, '2020-11-26 01:37:40', '2020-11-26 01:37:40');
 
 -- --------------------------------------------------------
 
@@ -395,7 +527,9 @@ INSERT INTO `submenu` (`submenu_id`, `denominacion`, `icon`, `url`, `detalle`, `
 (8, 'Menú', 'fa-cogs', '#', '', 4),
 (9, 'Usuarios', NULL, '/usuario/agregar', '', 4),
 (18, 'Panel', NULL, '/bebida/panel', '', 7),
-(19, 'Panel', NULL, '/comida/panel', '', 8);
+(19, 'Panel', NULL, '/comida/panel', '', 8),
+(20, 'Categorías', ' ', '/categoria/panel', '', 7),
+(21, 'Marcas', ' ', '/marca/panel', '', 7);
 
 -- --------------------------------------------------------
 
@@ -416,8 +550,10 @@ CREATE TABLE `submenuconfiguracionmenu` (
 INSERT INTO `submenuconfiguracionmenu` (`submenuconfiguracionmenu_id`, `compuesto`, `compositor`) VALUES
 (181, 1, 8),
 (182, 1, 9),
-(220, 2, 18),
-(221, 2, 19);
+(229, 2, 18),
+(230, 2, 20),
+(231, 2, 21),
+(232, 2, 19);
 
 -- --------------------------------------------------------
 
@@ -478,6 +614,12 @@ ALTER TABLE `archivo`
   ADD PRIMARY KEY (`archivo_id`);
 
 --
+-- Indices de la tabla `archivocategoria`
+--
+ALTER TABLE `archivocategoria`
+  ADD PRIMARY KEY (`archivocategoria_id`);
+
+--
 -- Indices de la tabla `archivomarca`
 --
 ALTER TABLE `archivomarca`
@@ -493,7 +635,13 @@ ALTER TABLE `bebida`
 -- Indices de la tabla `bebidapedido`
 --
 ALTER TABLE `bebidapedido`
-  ADD PRIMARY KEY (`bebidamesa_id`);
+  ADD PRIMARY KEY (`bebidapedido_id`);
+
+--
+-- Indices de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  ADD PRIMARY KEY (`categoria_id`);
 
 --
 -- Indices de la tabla `cliente`
@@ -571,9 +719,9 @@ ALTER TABLE `mesa`
   ADD PRIMARY KEY (`mesa_id`);
 
 --
--- Indices de la tabla `pedidio`
+-- Indices de la tabla `pedido`
 --
-ALTER TABLE `pedidio`
+ALTER TABLE `pedido`
   ADD PRIMARY KEY (`pedido_id`);
 
 --
@@ -613,25 +761,37 @@ ALTER TABLE `usuariodetalle`
 -- AUTO_INCREMENT de la tabla `archivo`
 --
 ALTER TABLE `archivo`
-  MODIFY `archivo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `archivo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `archivocategoria`
+--
+ALTER TABLE `archivocategoria`
+  MODIFY `archivocategoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `archivomarca`
 --
 ALTER TABLE `archivomarca`
-  MODIFY `archivomarca_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `archivomarca_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `bebida`
 --
 ALTER TABLE `bebida`
-  MODIFY `bebida_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `bebida_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `bebidapedido`
 --
 ALTER TABLE `bebidapedido`
-  MODIFY `bebidamesa_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bebidapedido_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
+
+--
+-- AUTO_INCREMENT de la tabla `categoria`
+--
+ALTER TABLE `categoria`
+  MODIFY `categoria_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `cliente`
@@ -643,13 +803,13 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de la tabla `comida`
 --
 ALTER TABLE `comida`
-  MODIFY `comida_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `comida_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `comidapedido`
 --
 ALTER TABLE `comidapedido`
-  MODIFY `comidapedido_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `comidapedido_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracionmenu`
@@ -679,7 +839,7 @@ ALTER TABLE `item`
 -- AUTO_INCREMENT de la tabla `itemconfiguracionmenu`
 --
 ALTER TABLE `itemconfiguracionmenu`
-  MODIFY `itemconfiguracionmenu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `itemconfiguracionmenu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `localidad`
@@ -691,7 +851,7 @@ ALTER TABLE `localidad`
 -- AUTO_INCREMENT de la tabla `marca`
 --
 ALTER TABLE `marca`
-  MODIFY `marca_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `marca_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `menu`
@@ -706,22 +866,22 @@ ALTER TABLE `mesa`
   MODIFY `mesa_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `pedidio`
+-- AUTO_INCREMENT de la tabla `pedido`
 --
-ALTER TABLE `pedidio`
-  MODIFY `pedido_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pedido`
+  MODIFY `pedido_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=168;
 
 --
 -- AUTO_INCREMENT de la tabla `submenu`
 --
 ALTER TABLE `submenu`
-  MODIFY `submenu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `submenu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `submenuconfiguracionmenu`
 --
 ALTER TABLE `submenuconfiguracionmenu`
-  MODIFY `submenuconfiguracionmenu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=222;
+  MODIFY `submenuconfiguracionmenu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
