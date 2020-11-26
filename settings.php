@@ -7,7 +7,7 @@ const SO_UNIX = false;
 /*const DB_HOST = 'localhost';
 const DB_USER = 'usu_prod';
 const DB_PASS = 'Dandoran$86';
-const DB_NAME = 'gregor.prod';*/
+const DB_NAME = 'bunker.prod';*/
 const DB_HOST = 'localhost';
 const DB_USER = 'root';
 const DB_PASS = '';
@@ -26,23 +26,23 @@ if (SO_UNIX == true) {
 	define('URL_APP', "");
 	define('URL_STATIC', "/static/template/");
 } else {
-	define('URL_APP', "/gregor");
-	define('URL_STATIC', "/gregor/static/template/");
+	define('URL_APP', "/bunker");
+	define('URL_STATIC', "/bunker/static/template/");
 }
 
 const TEMPLATE = "static/template.html";
 
 # Configuración estática del sistema
-const APP_TITTLE = "GREGOR";
-const APP_VERSION = "v1.0.2";
-const APP_ABREV = "gregor";
+const APP_TITTLE = "Bunker";
+const APP_VERSION = "v1.0";
+const APP_ABREV = "bunker";
 const LOGIN_URI = "/usuario/login";
 const DEFAULT_MODULE = "usuario";
 const DEFAULT_ACTION = "panel";
 //const URL_APPFILES = "/var/www/html/safi/private/archivos/";
-const URL_APPIMAGES = "C:/xampp/htdocs/gregor/static/images/";
+const URL_APPIMAGES = "C:/xampp/htdocs/bunker/static/images/";
 //MUESTRA LAS IMÁGENES
-const URL_IMAGES = "/gregor/static/images/";
+const URL_IMAGES = "/bunker/static/images/";
 
 # Directorio private del sistema
 $url_private = "C:/appfiles/";
