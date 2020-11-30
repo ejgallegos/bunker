@@ -3,10 +3,10 @@
 
 class PedidoView extends View {
 	
-	function panel($bebida_collection) {
-		$gui = file_get_contents("static/modules/bebida/panel.html");
-
-		$render = $this->render_regex('TBL_BEBIDA', $gui, $bebida_collection);
+	function panel($pedido_collection) {
+		$gui = file_get_contents("static/modules/pedido/panel.html");
+		
+		$render = $this->render_regex('TBL_PEDIDO', $gui, $pedido_collection);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
@@ -47,6 +47,12 @@ class PedidoView extends View {
 		$gui_tbl_pedido_comida = file_get_contents("static/modules/pedido/tbl_pedido_comida.html");
 		$gui_tbl_pedido_comida = $this->render_regex_dict('PEDIDO_COMIDA', $gui_tbl_pedido_comida, $comida_collection);
 		print $gui_tbl_pedido_comida;
+	}
+	
+	function calcularPedido($subTotales) {
+		$gui_totales = file_get_contents("static/modules/pedido/totales.html");
+		$gui_totales = $this->render($subTotales, $gui_totales);
+		print $gui_totales;
 	}
 
 	function editar($bebida_collection, $obj_bebida) {

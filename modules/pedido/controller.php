@@ -7,6 +7,8 @@ require_once "modules/marca/model.php";
 require_once "modules/comida/model.php";
 require_once "modules/bebidapedido/model.php";
 require_once "modules/comidapedido/model.php";
+require_once "modules/historialpedido/model.php";
+require_once "common/libs/vendor/autoload.php";
 
 
 class PedidoController {
@@ -17,22 +19,57 @@ class PedidoController {
 	}
 
 	function panel() {
-    	SessionHandler()->check_session();
+		SessionHandler()->check_session();
 		
-		$bebida_collection = Collector()->get('Bebida');
+		$options = array(
+			'cluster' => 'us2',
+			'useTLS' => true
+		);
+		$pusher = new Pusher\Pusher(
+			'594823f1abf3ec29cbf9',
+			'd21496dc0c3d4ba7eae4',
+			'1114989',
+			$options
+		);
 
-		foreach ($bebida_collection as $clave => $valor) {
-			if ($valor->habilitado == 1 && $valor->eliminado == 0) {
-				$bebidas[] = $valor;
+		$data['message'] = 'hello world';
+		$pusher->trigger('my-channel', 'my-event', $data);
+		
+		$select = "bp.pedido PEDIDO, bp.cantidad CANT, m.denominacion MARCA, b.denominacion DENO, b.valor PRECIO";
+		$from = "pedido p, bebidapedido bp, bebida b, marca m ";
+		$where = "bp.bebida = b.bebida_id AND b.marca = m.marca_id AND p.pedido_id = bp.pedido AND p.estado = 2";
+		$bebidas_collection = CollectorCondition()->get('BebidaPedido', $where, 4, $from, $select);
+
+		$select = "cp.pedido PEDIDO, cp.comida COMIDAID, c.denominacion DENO, c.valor PRECIO, cp.cantidad CANT";
+		$from = "pedido p, comida c, comidapedido cp";
+		$where = "c.comida_id = cp.comida AND p.pedido_id = cp.pedido AND p.estado = 2";
+		$comidas_collection = CollectorCondition()->get('ComidaPedido', $where, 4, $from, $select);
+
+		$pedido_collection = Collector()->get('Pedido');
+		foreach ($pedido_collection as $clave => $valor) {
+			foreach ($bebidas_collection as $clave1 => $valor1) {
+				if ($valor->pedido_id == $valor1['PEDIDO']) {
+					$valor->descripcion_bebidas[] = $valor1['CANT'] . " " . $valor1['MARCA'] . " " . $valor1['DENO'];
+				}
+			}
+			foreach ($comidas_collection as $clave2 => $valor2) {
+				if ($valor->pedido_id == $valor2['PEDIDO']) {
+					$valor->descripcion_comida[] = $valor2['CANT'] . " " . $valor2['DENO'];
+				}
 			}
 		}
-		$this->view->panel($bebidas);
+		$this->view->panel($pedido_collection);
 	}
 
 	function agregar() {
     	SessionHandler()->check_session();
 		
 		$mesa_collection = Collector()->get('Mesa');
+		foreach ($mesa_collection as $clave => $valor) {
+			if ($valor->disponible == 1) {
+				$mesas_disponnibles[] = $valor;
+			}
+		}
 		$categoria_collection = Collector()->get('Categoria');
 
 		foreach ($categoria_collection as $clave => $valor) {
@@ -51,8 +88,8 @@ class PedidoController {
 				$comidas[] = $valor;
 			}
 		}
-
-		$this->view->agregar($mesa_collection, $categoria_collection, $comidas);
+	
+		$this->view->agregar($mesas_disponnibles, $categoria_collection, $comidas);
 	}
 
 	function traerMarcas($arg) {
@@ -68,6 +105,7 @@ class PedidoController {
 		//GUARDA EL PEDIDO DE BEBIDA
 		SessionHandler()->check_session();
 		date_default_timezone_set('America/Argentina/La_Rioja');
+
 		$ids = explode('@', $arg);
 		$mesa = $ids[0];
 		$bebida = $ids[1];
@@ -80,13 +118,25 @@ class PedidoController {
 			$bp->bebida = $bebida;
 			$bp->cantidad = $cantidad;
 			$bp->save();
+
+			$md = new Mesa();
+			$md->mesa_id = $mesa;
+			$md->get();
+			$md->disponible = 2;
+			$md->save();
 			print($pedidoId);exit;
 		}
 
 		$this->model->fecha = date('Y-m-d');		
 		$this->model->mesa = $mesa;		
 		$this->model->estado = 1;		
-        $this->model->save();
+		$this->model->save();
+		
+		$md = new Mesa();
+		$md->mesa_id = $mesa;
+		$md->get();
+		$md->disponible = 2;
+		$md->save();
 		
 		$pedido_id = $this->model->pedido_id;
 		
@@ -115,6 +165,12 @@ class PedidoController {
 			$bp->comida = $comida;
 			$bp->cantidad = $cantidad;
 			$bp->save();
+			
+			$md = new Mesa();
+			$md->mesa_id = $mesa;
+			$md->get();
+			$md->disponible = 2;
+			$md->save();
 			print($pedidoId);exit;
 		}
 
@@ -124,6 +180,12 @@ class PedidoController {
         $this->model->save();
 		
 		$pedido_id = $this->model->pedido_id;
+
+		$md = new Mesa();
+		$md->mesa_id = $mesa;
+		$md->get();
+		$md->disponible = 2;
+		$md->save();
 		
 		$bp = new ComidaPedido();
 		$bp->pedido = $pedido_id;
@@ -184,7 +246,43 @@ class PedidoController {
 		$cp->delete();
 	}
 
+	function calcularPedido($arg){
+		SessionHandler()->check_session();
+		$select_bebida = "SUM(b.valor * bp.cantidad) SUBTOTALBEBIDA";
+		$from_bebida = "bebida b, bebidapedido bp";
+		$where_bebida = "b.bebida_id = bp.bebida AND bp.pedido = {$arg}";
+		$subtotal_bebida = CollectorCondition()->get('BebidaPedido', $where_bebida, 4, $from_bebida, $select_bebida);
+		
+		$select_comida = "SUM(c.valor * cp.cantidad) SUBTOTALCOMIDA";
+		$from_comida = "comida c, comidapedido cp";
+		$where_comida = "c.comida_id = cp.comida AND cp.pedido = {$arg}";
+		$subtotal_comida = CollectorCondition()->get('ComidaPedido', $where_comida, 4, $from_comida, $select_comida);
+		$totalPedido = round($subtotal_bebida[0]["SUBTOTALBEBIDA"] + $subtotal_comida[0]["SUBTOTALCOMIDA"], 2);
+		$totales = array('subtotalbebida' => $subtotal_bebida[0]["SUBTOTALBEBIDA"], 'subtotalcomida' => $subtotal_comida[0]["SUBTOTALCOMIDA"], 'totalpedido' => $totalPedido, 'id_pedido' => $arg);
+		$this->view->calcularPedido($totales);
+	}
+	
+	function finalizarPedido(){
+		SessionHandler()->check_session();
+		$pedidoId = filter_input(INPUT_POST, "idpedido");
+		$subtbebida = filter_input(INPUT_POST, "subtbebida");
+		$subtcomida = filter_input(INPUT_POST, "subtcomida");
+		$tpedido = filter_input(INPUT_POST, "tpedido");
+		$this->model->pedido_id = $pedidoId;
+		$this->model->get();
+		$this->model->estado = 2;
+		$this->model->save();
 
+		$hp = new HistorialPedido();
+		$hp->pedido = $pedidoId;
+		$hp->estado = 2;
+		$hp->subtotalbebida = $subtbebida;
+		$hp->subtotalcomida = $subtcomida;
+		$hp->total = $tpedido;
+		$hp->save();
+
+		header("Location: " . URL_APP . "/pedido/agregar");
+	}
 
 	function editar($arg) {
 		SessionHandler()->check_session();

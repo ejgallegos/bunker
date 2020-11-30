@@ -68,9 +68,17 @@ function SmartWizard(target, options) {
 		this.contentWidth = $this.elmStepContainer.width();
 
 		$($this.buttons.next).click(function () {
-			$this.goForward();
-			//document.getElementById("mostrarPedidoBebida").style.display = "none";
-			return false;
+			var mesaDisponible = document.getElementById("mesa").value;
+			if (
+				mesaDisponible == "" ||
+				mesaDisponible == 0 ||
+				mesaDisponible == null
+			) {
+				$(this).addClass("buttonDisabled");
+			} else {
+				$this.goForward();
+				return false;
+			}
 		});
 		$($this.buttons.previous).click(function () {
 			$this.goBackward();

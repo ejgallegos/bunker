@@ -10,7 +10,6 @@ class Pedido extends StandardObject {
 		$this->fecha = '';
 		$this->mesa = 0;
 		$this->estado = 0;
-		
 	}
 
 }
