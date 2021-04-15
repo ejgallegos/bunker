@@ -5,11 +5,11 @@ require_once "modules/bebida/model.php";
 
 class Pedido extends StandardObject {
 	
-	function __construct(Bebida $bebida=NULL) {
+	function __construct(Estado $estado=NULL) {
 		$this->pedido_id = 0;
 		$this->fecha = '';
 		$this->mesa = 0;
-		$this->estado = 0;
+		$this->estado = $estado;
 	}
 
 }

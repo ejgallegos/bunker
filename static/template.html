@@ -18,7 +18,6 @@
   <script src="{url_static}vendors/jquery/dist/jquery.min.js"></script>
   <script src="{url_static}vendors/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="{url_app}/static/common/alertas/alertas.js" language="javascript"></script>
-
   <style type="text/css">
     .print_this {
       display: none;
@@ -48,7 +47,7 @@
           <div class="clearfix"></div>
           <div class="profile clearfix hidden-print">
             <div class="profile_pic">
-              <img src="{url_static}images/user.png" alt="..." class="img-circle profile_img">
+              <img src="{url_static}images/loguin.png" alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
               <span>Bienvenido</span>
@@ -56,17 +55,16 @@
             </div>
             <div class="clearfix"></div>
           </div>
-          <br />
           {sidebar-menu}
           <div class="sidebar-footer hidden-small">
             <a data-toggle="tooltip" data-placement="top" title="Perfil" href="{url_app}/usuario/perfil">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
             </a>
             <a data-toggle="tooltip" data-placement="top" title="">
-              <!--<span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>-->
+              <span class="fa fa-long-arrow-left" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="Lock">
-              <!--<span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>-->
+            <a data-toggle="tooltip" data-placement="top" title="">
+              <span class="fa fa-long-arrow-right" aria-hidden="true"></span>
             </a>
             <a data-toggle="tooltip" data-placement="top" title="Log Out" href="{url_app}/usuario/checkout">
               <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
@@ -84,7 +82,7 @@
               <li class="">
                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="{url_static}images/user.png" alt="">{usuariodetalle-apellido}, {usuariodetalle-nombre}
+                  <img src="{url_static}images/loguin.png" alt="">{usuariodetalle-apellido}, {usuariodetalle-nombre}
                   <span class=" fa fa-angle-down"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -113,6 +111,8 @@
   </div>
   <script src="{url_static}vendors/moment/min/moment.min.js"></script>
   <!--<script src="{url_static}vendors/parsleyjs/dist/parsley.min.js"></script>-->
+  <script src="{url_static}vendors/validator/validator.js"></script>
+  <script src="{url_static}vendors/validator/multifield.js"></script>
   <script src="{url_static}vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
   <script src="{url_static}vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
   <script src="{url_static}vendors/fastclick/lib/fastclick.js"></script>

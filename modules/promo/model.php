@@ -1,10 +1,10 @@
 <?php
 require_once "modules/categoria/model.php";
 
-class Comida extends StandardObject {
+class Promo extends StandardObject {
 	
 	function __construct(Categoria $categoria=NULL) {
-		$this->comida_id = 0;
+		$this->promo_id = 0;
 		$this->denominacion = '';
 		$this->descripcion = '';
 		$this->valor = 0.00;

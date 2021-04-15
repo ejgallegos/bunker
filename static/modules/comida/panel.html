@@ -23,6 +23,13 @@
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/comida/guardar"
                     enctype="multipart/form-data">
                     <div class="form-group">
+                        <label>Categoría</label>
+                        <select class="form-control" name="categoria" id="categoria">
+                            <option value="#">Seleccionar Categoria</option>
+                            {slt_categoria}
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Denominación</label>
                         <input type="text" class="form-control" id="denominacion" name="denominacion" required>
                     </div>

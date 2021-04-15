@@ -1,7 +1,3 @@
-<!--DATA TABLE-->
-<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-<!--DATA TABLE-->
 <div class="col-lg-12">
     <ul class="breadcrumb">
         <li><a href="{url_app}/usuario/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
@@ -19,53 +15,26 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <table id="tbl_pedido" class="table table-striped table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Fecha</th>
                         <th>Mesa</th>
                         <th>Bebida/s</th>
+                        <th>Comida/s</th>
+                        <th>Estado</th>
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!--TBL_PEDIDO-->
-                    <tr>
-                        <td>{pedido-pedido_id}</td>
-                        <td>{pedido-fecha}</td>
-                        <td>{pedido-mesa}</td>
-                        <td>{pedido-descripcion_bebidas}</td>
-                        <td>
-                            <center>
-                                <button class="btn btn-warning btn-xs"
-                                    onclick="confirma_formulario(3, '{url_app}/pedido/editar/{pedido-pedido_id}');"
-                                    title="Editar pedido"><i class="fa fa-edit"></i></button>
-                                <button class="btn btn-danger btn-xs"
-                                    onclick="confirma_formulario(4, '{url_app}/pedido/anular/{pedido-pedido_id}');"
-                                    title="Anular pedido"><i class="fa fa-trash"></i></button>
-                            </center>
-                        </td>
-                    </tr>
-                    <!--TBL_PEDIDO-->
+                <tbody id="pedidosCargados">
+                    {tbl_pedidos}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<!-- Datatables -->
-<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function () {
-        $('#tbl_pedido').dataTable({
-            "aaSorting": [[0, "asc"]]
-            , "iDisplayLength": 10
-        });
-    });
-</script>
+
 <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 <script>
     // Enable pusher logging - don't include this in production
@@ -75,8 +44,28 @@
         cluster: 'us2'
     });
 
-    var channel = pusher.subscribe('my-channel');
+    var channel = pusher.subscribe('bunker');
     channel.bind('my-event', function (data) {
-        alert(JSON.stringify(data));
+        if (data.message !== null || data.message !== 0 || data.message !== "") {
+            var pId = parseInt(data.message)
+            notiInfo(pId);
+            const nuevoPedido = $.ajax({
+                url: `{url_app}/pedido/panel/${pId}`,
+                dataType: 'text',
+                async: false
+            }).responseText;
+            document.getElementById("pedidosCargados").innerHTML = nuevoPedido;
+        }
+
     });
+
+    const notiInfo = (pId) => {
+        new PNotify({
+            title: 'Info!',
+            text: `Pedido ${pId} Registrado.`,
+            type: 'info',
+            hide: false,
+            styling: 'bootstrap3'
+        });
+    }
 </script>

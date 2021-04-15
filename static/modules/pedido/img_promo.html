@@ -1,32 +1,33 @@
-<!--BEB-->
+<!--PROMO-->
 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6  ">
     <div class="tile-stats">
         <center>
-            <img src="/bunker/static/images/marca/MRC/IMG" alt="" class="" height="50px" width="80px">
+            <img src="/bunker/static/images/promo/{promo-promo_id}/{promo-imagen}" alt="" class="" height="50px"
+                width="80px">
             <p>&nbsp;</p>
             <div class="count" style="font-size: 14px;">
-                MARCA
+                {promo-denominacion}
             </div>
             <div class="count" style="font-size: 14px;">
-                DENO
+                {promo-descripcion}
             </div>
             <div class="count" style="font-size: 18px;">
-                <b>$ PRECIO</b>
+                <b>$ {promo-valor}</b>
             </div>
             <p>&nbsp;</p>
             <div class="form-group row">
                 <div class="col-lg-12">
-                    <input type="number" name="cantidadID" id="cantidadID" class="form-control" placeholder="Cantidad"
-                        required>
+                    <input type="number" name="cantpromo{promo-promo_id}" id="cantpromo{promo-promo_id}"
+                        class="form-control" placeholder="Cantidad" required>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-12">
-                    <button type="button" id="buttonCargar" class="btn btn-primary btn-large"
-                        onclick="cargarBebida('ID')">Cargar</button>
+                    <button type="button" class="btn btn-primary btn-large"
+                        onclick="cargarPromo('{promo-promo_id}')">Cargar</button>
                 </div>
             </div>
         </center>
     </div>
 </div>
-<!--BEB-->
+<!--PROMO-->

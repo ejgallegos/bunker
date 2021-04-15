@@ -1,0 +1,15 @@
+<!--TBL_PEDIDO-->
+<tr>
+    <td>{pedido-pedido_id}</td>
+    <td>{pedido-fecha}</td>
+    <td style="background-color: antiquewhite; text-align: center; font-weight: bold; font-size: 25px;">{pedido-mesa}</td>
+    <td>{pedido-bebidas}</td>
+    <td>{pedido-comidas}</td>
+    <td><button type="button" class="{estado-etiqueta}">{estado-denominacion}</button></td>
+    <td>
+        <center>
+            <button class="btn btn-success" onclick="location.href='{url_app}/pedido/agregarProducto/?pedidoId={pedido-pedido_id}'">AGREGAR</button>
+        </center>
+    </td>
+</tr>
+<!--TBL_PEDIDO-->

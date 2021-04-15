@@ -33,7 +33,7 @@ if (SO_UNIX == true) {
 const TEMPLATE = "static/template.html";
 
 # Configuración estática del sistema
-const APP_TITTLE = "Bunker";
+const APP_TITTLE = "De La Cruz";
 const APP_VERSION = "v1.0";
 const APP_ABREV = "bunker";
 const LOGIN_URI = "/usuario/login";
@@ -57,4 +57,14 @@ $session_vars = array('login'=>false);
 foreach($session_vars as $var=>$value) {
     if(!isset($_SESSION[$var])) $_SESSION[$var] = $value;
 }
+
+//************ PARÁMETROS GENERALES ****************//
+// CATEGORÍAS
+const COMIDA = 8;
+const PROMO = 9;
+
+// ESTADOS
+const GENERADO = 1;
+const PENDIENTE = 2;
+const FINALIZADO = 3;
 ?>

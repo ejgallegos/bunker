@@ -22,41 +22,15 @@
                     <div id="wizard" class="form_wizard wizard_horizontal">
                         <ul class="wizard_steps anchor">
                             <li>
-                                <a href="#step-1" class="selected" isdone="1" rel="1">
+                                <a href="#step-1" class="disabled" isdone="0" rel="1">
                                     <span class="step_no">1</span>
                                     <span class="step_descr">
                                         Paso 1<br>
-                                        <small>Seleccionar Mesa</small>
-                                    </span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#step-2" class="disabled" isdone="0" rel="2">
-                                    <span class="step_no">2</span>
-                                    <span class="step_descr">
-                                        Paso 2<br>
                                         <small>Seleccionar Productos</small>
                                     </span>
                                 </a>
                             </li>
-                            <!--<li>
-                                <a href="#step-3" class="disabled" isdone="0" rel="3">
-                                    <span class="step_no">3</span>
-                                    <span class="step_descr">
-                                        Paso 3<br>
-                                        <small>Seleccionar Comida</small>
-                                    </span>
-                                </a>
-                            </li>-->
-                            <li>
-                                <a href="#step-3" class="disabled" isdone="0" rel="3">
-                                    <span class="step_no">3</span>
-                                    <span class="step_descr">
-                                        Paso 3<br>
-                                        <small>Finalizar Pedido</small>
-                                    </span>
-                                </a>
-                            </li>
+
                         </ul>
 
 
@@ -64,35 +38,8 @@
 
                         <div class="stepContainer">
 
-                            <div id="step-1" class="content" style="display: block;">
-                                <div class="col-md-6 center-margin">
-                                    <label class="">FECHA * :</label>
-                                    <div class="form-group row">
-                                        <div class="col-lg-12">
-                                            <input type="text" name="fechaHoy" id="fechaHoy" class="form-control"
-                                                required="" readonly>
-                                            <span class="fa fa-calendar-o form-control-feedback right"
-                                                aria-hidden="true"></span>
-                                        </div>
-                                    </div>
 
-                                    <label class="">MESA * :</label>
-                                    <div class="form-group row">
-                                        <div class="col-lg-12">
-                                            <select class="form-control" name="mesa" id="mesa">
-                                                {slt_mesa}
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-12" id="mesaNoDisponible" style="display: none;">
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-                            <div id="step-2" class="content" style="display: none;">
+                            <div id="step-1" class="content" style="display: none;">
                                 <div class="col-md-12 center-margin" id="formCategorias">
                                     <div class="form-group row">
                                         <div class="col-lg-12">
@@ -110,75 +57,10 @@
                                     </div>
 
                                     <input type="hidden" name="pedidoId" id="pedidoId">
+                                    <input type="hidden" name="mesaNro" id="mesaNro">
                                     <a onclick="volver()" class="btn btn-warning">Volver</a>
                                 </div>
 
-                            </div>
-
-
-                            <!--<div id="step-3" class="content" style="display: none;">
-                                <div class="col-md-12 center-margin">
-
-                                    <div class="form-group row" id="imgComidass">
-                                        <div classnoneform-group row" id="imgComidas2s">
-                                            <div class="col-lg-12">
-                                                <div>{img_comidas}</div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row" id="imgComidas2" style="display: none;">
-
-                                        </div>
-
-                                        <input type="hidden" name="pedidoId" id="pedidoId">
-                                    </div>
-
-                                </div>
-                            </div>-->
-
-
-                            <div id="step-3" class="content" style="display: none;">
-                                <div class="row center-margin">
-                                    <div class="col-lg-12">
-                                        <div class="tile_count">
-                                            <div class="col-lg-4 tile_stats_count">
-                                                <span class="count_top"><i class="fa fa-hand-o-right"></i> Nro.
-                                                    Pedido</span>
-                                                <div class="count" id="nroPedidoFinal"># 0</div>
-                                            </div>
-                                            <div class="col-lg-4 tile_stats_count">
-                                                <a class="btn btn-app" style="margin-top: 10px;"
-                                                    onclick="calcularPedido()">
-                                                    <i class="fa fa-calculator"></i> Calcular
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row" id="totalesPedido">
-                                    <div class="col-lg-12">
-                                        <div class="tile_count">
-                                            <div class="col-lg-4 tile_stats_count">
-                                                <span class="count_top"><i class="fa fa-beer"></i> Subtotal
-                                                    Bebida</span>
-                                                <div class="count green">$ 0 &nbsp;</div>
-                                            </div>
-                                            <div class="col-lg-4 tile_stats_count">
-                                                <span class="count_top"><i class="fa fa-cutlery"></i> Subtotal
-                                                    Comida</span>
-                                                <div class="count green">$ 0 &nbsp;</div>
-                                            </div>
-                                            <div class="col-lg-4 tile_stats_count">
-                                                <span class="count_top"><i class="fa fa-dollar"></i> TOTAL
-                                                    PEDIDO</span>
-                                                <div class="count red">$ 0 &nbsp;</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <input type="hidden" name="pedidoId" id="pedidoId">
                             </div>
 
 
@@ -443,17 +325,6 @@
         notiEliminar();
     }
 
-    const calcularPedido = () => {
-        const pedidoId = document.getElementById("pedidoId").value;
-        const totalesHtml = document.getElementById("totalesPedido");
-        fetch(`{url_app}/pedido/calcularPedido/${parseInt(pedidoId)}`)
-            .then((response) => response.text())
-            .then((data) => totalesHtml.innerHTML = data)
-            .catch((e) => console.log(e));
-        totalesHtml.style.display = "block";
-        document.getElementById("pedidoId").value = pedidoId;
-    }
-
     const notiSuccess = () => {
         new PNotify({
             title: 'Excelente!',
@@ -477,15 +348,24 @@
         document.getElementById("formMarcas").style.display = "none";
     }
 
-    const start = () => {
-        const fechaHoy = moment().format('DD/MM/YYYY');
-        document.getElementById("fechaHoy").value = fechaHoy;
-        var mesaDisponible = document.getElementById("mesa").value;
-        if (mesaDisponible == "" || mesaDisponible == 0 || mesaDisponible == null) {
-            document.getElementById("mesa").style.display = "none";
-            document.getElementById("mesaNoDisponible").style.display = "block";
-            document.getElementById("mesaNoDisponible").innerHTML = "<button type='button' class='btn btn-round btn-danger'>NO HAY MESAS DISPONIBLES</button>";
+    const getParameterByGet = (arg) => {
+            arg = arg.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&amp;amp;]" + arg + "=([^&amp;amp;#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         }
+
+    const start = () => {
+      let pedidoId = getParameterByGet('pedidoId');
+      console.log(pedidoId);
+      /*CARGA TABLA DE PEDIDOS DE BEBIDAS*/
+        const tblPedidoBebida = $.ajax({
+            url: `{url_app}/pedido/mostrarPedidoBebida/${parseInt(pedidoId)}`,
+            dataType: 'text',
+            async: false
+        }).responseText;
+        document.getElementById("mostrarPedidoBebida").innerHTML = tblPedidoBebida;
+        document.getElementById("mostrarPedidoBebida").style.display = "block";
     }
 
     window.onload = start;
